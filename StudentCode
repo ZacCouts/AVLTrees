@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+class Node
+{
+public:
+	int value;
+	Node* rightSubtree;
+	Node* leftSubtree;
+	int Height;
+
+	Node(int aValue)
+	{
+		value = aValue;
+		rightSubtree = NULL;
+		leftSubtree = NULL;
+		Height = 1;
+	}
+};
+
+//To calculate if a key being inserted
+//is less than or greater than the node
+//it is being compared to.
+int Max(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+Node* RightRotation(Node* ProblemRoot)
+{
+	Node* LeftSubtree = ProblemRoot->leftSubtree;
+	Node* LSubtreeR = LeftSubtree->rightSubtree;
+
+	LeftSubtree->rightSubtree = ProblemRoot;
+	ProblemRoot->leftSubtree = LSubtreeR;
+
+	return LeftSubtree;
+}
+
+Node* LeftRotation(Node* ProblemRoot)
+{
+	Node* RightSubtree = ProblemRoot->rightSubtree;
+	Node* RSubtreeL = RightSubtree->leftSubtree;
+
+	RightSubtree->leftSubtree = ProblemRoot;
+	ProblemRoot->rightSubtree = RSubtreeL;
+
+	return RightSubtree;
+}
+
+Node* Insert(Node* AtNode, int key)
+{
+	//First, figure out where to put the node
+	if (AtNode == NULL)
+
+		if (AtNode->value > key)
+			int place;
+
+		if (AtNode->value < key)
+			int placeholder;
+	
+	//Go down the subtree to find where to put the node,
+	//But then you must also come back up the node.
+
+	//When coming back up all the way to the root,
+	//Make sure that every Node still has balance.
+}
+
+void main()
+{
+	system("PAUSE");
+	return;
+}
