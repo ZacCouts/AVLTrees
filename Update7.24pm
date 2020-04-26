@@ -1,0 +1,144 @@
+#include <iostream>
+#include<chrono>
+
+using namespace std;
+
+class Node
+{
+public:
+	int value;
+	Node* rightSubtree;
+	Node* leftSubtree;
+	int Height;
+
+	
+};
+Node* CreateNode(int aValue)
+{
+	Node* aNode = new Node;
+	aNode->value = aValue;
+	aNode->rightSubtree = NULL;
+	aNode->leftSubtree = NULL;
+	aNode->Height = 1;
+	return aNode;
+}
+//To calculate if a key being inserted
+//is less than or greater than the node
+//it is being compared to.
+int Max(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+int Balance(Node* aNode)
+{
+	return aNode->leftSubtree->Height - aNode->rightSubtree->Height;
+}
+
+Node* Sling(Node* ProblemRoot, int Imbalance)
+{
+	Node* NewRoot = NULL;
+	if (Imbalance > 0)
+	{
+		//Left Rotation
+		//Right subtree becomes root
+		//Right subtree's left subtree
+		//becomes new root's left subtree's right subtree
+
+		NewRoot = ProblemRoot->rightSubtree;
+		Node* temporary = NewRoot->leftSubtree;
+		NewRoot->leftSubtree = ProblemRoot;
+		ProblemRoot->rightSubtree = temporary;
+
+		return NewRoot;
+	}
+	else
+	{
+		//RightRotation
+		//Left subtree becomes root
+		//Left subtree's right subtree
+		//becomes new root's right subtree's left subtree
+
+		NewRoot = ProblemRoot->leftSubtree;
+		Node* temporary = NewRoot->rightSubtree;
+		NewRoot->rightSubtree = ProblemRoot;
+		ProblemRoot->leftSubtree = temporary;
+
+		return NewRoot;
+	}
+}
+
+Node* Swap(Node* ProblemRoot, int Imbalance)
+{
+	if (Imbalance > 0)
+	{
+		//Left rotate left child
+		ProblemRoot->leftSubtree = Sling(ProblemRoot->leftSubtree, 2);
+		//Right rotate root
+		ProblemRoot = Sling(ProblemRoot, -2);
+    return ProblemRoot;
+	}
+	else
+	{
+		//Right rotate child right child
+		ProblemRoot->rightSubtree = Sling(ProblemRoot->rightSubtree, -2);
+		//Left rotate root
+		ProblemRoot = Sling(ProblemRoot, 2);
+    return ProblemRoot;
+	}
+}
+
+Node* Insert(Node* AtNode, int key)
+{
+	//First, figure out where to put the node
+	//Go down the subtree to find where to put the node,
+	//But then you must also come back up the tree.
+	if (AtNode == NULL)
+		return(CreateNode(key));
+
+	if (key > AtNode->value)
+		AtNode->rightSubtree = Insert(AtNode->rightSubtree, key);
+
+	if (key < AtNode->value)
+		AtNode->leftSubtree = Insert(AtNode->leftSubtree, key);
+
+	//Update height
+	AtNode->Height = Max(AtNode->leftSubtree->Height, AtNode->rightSubtree->Height) + 1;
+
+	
+	//When coming back up all the way to the root,
+	//Make sure that every Node still has balance.
+	
+	int balance = Balance(AtNode);
+
+	if (balance > 1)
+	{
+		if (AtNode->leftSubtree->rightSubtree != NULL)
+		{
+			Swap(AtNode, balance);
+		}
+		else
+			Sling(AtNode, balance);
+	}
+
+	if (balance < -1)
+	{
+		{
+			if (AtNode->rightSubtree->leftSubtree != NULL)
+			{
+				Swap(AtNode, balance);
+			}
+			else
+				Sling(AtNode, balance);
+		}
+	}
+
+	return AtNode;
+}
+
+void main()
+{
+  cout << "Test" << endl;
+	system("PAUSE");
+	return;
+}
